@@ -1,35 +1,38 @@
-<svg width="200" height="200" viewBox="-100 -100 200 200">
-  <circle class="body" cx="0" cy="-50" r="32" fill="red" />
+<svg xmlns="http://www.w3.org/2000/svg"  width="200" height="200" viewBox="-100 -100 200 200">
+  <circle class="body" cx="0" cy="-50" r="32" fill="#f65555"/>
 
   <circle class="eye" cx="-12" cy="-55" r="3" fill="skyblue" />
   <circle class="eye" cx="12" cy="-55" r="3" fill="skyblue" />
   
-  
-  <line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="blue"
-  stroke-width="35px"
+  <!-- hands -->
+  <line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="#8181e9"
+  stroke-width="28px"
   stroke-linecap="round" />
-  
-  <line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="green"
-  stroke-width="35px"
+
+  <!-- Legs -->
+  <line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="#76dc76"
+  stroke-width="33px"
   stroke-linecap="round" />
-  <line class=“limb" x1="25" y1="50" x2="0" y2="-5"  stroke="green"
-  stroke-width="35px"
+  <line class="limb" x1="25" y1="50" x2="0" y2="-5"  stroke="#76dc76"
+  stroke-width="33px"
   stroke-linecap="round"/>  
   
-  <circle class="button" cx="0" cy="14" r="3" fill="white"/>
+  <!-- two buttons -->
+  <circle class="button" cx="0" cy="14" r="3" fill="#4f41e9"/>
+  <circle class="button" cx="0" cy="0" r="3" fill="#f24a4a"/>
   
-  <circle class="button" cx="0" cy="0" r="3" fill="white"/>
-  
-  <rect class="mouth" x="-15" y="-27" width="30" height="10" rx="5" fill="black"
-  stroke="white"
+  <!-- tie -->
+  <rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="#ed24c5"
+  stroke="#9f2586"
   stroke-width="1" />
-  
-  <circle class="button" cx="0" cy="-22" r="7" fill="white"/>
+  <!-- bow tie button -->
+  <circle class="button" cx="0" cy="-22" r="6" fill="#cada39" stroke="black"/>
 	
-   <path d="M-11,-45 A2,2 0 1,0 10,-45"
-  	stroke-width="3"
-    stroke="black"
+  <!-- smile -->
+   <path d="M-11,-45 A2,2 0 1,0 11,-44.5"
+  	stroke-width="2"
+    stroke="#94b547"
     fill="none"
-     /> 
+    /> 
 
 </svg>
