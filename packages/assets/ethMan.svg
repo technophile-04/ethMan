@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg"  width="200" height="200" viewBox="-100 -100 200 200">
+  <circle class="body" cx="0" cy="-50" r="32" fill="hsl(60,90%,70%)"/>
+
+  <circle class="eye" cx="-12" cy="-55" r="3" fill="hsl(0,90%,70%)"/>
+  <circle class="eye" cx="12" cy="-55" r="3" fill="hsl(0,90%,70%)" />
+  
+  <!-- hands -->
+  <line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="hsl(240,90%,70%)"
+  stroke-width="28px"
+  stroke-linecap="round" />
+
+  <!-- Legs -->
+  <line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="hsl(340,90%,70%)"
+  stroke-width="33px"
+  stroke-linecap="round" />
+  <line class="limb" x1="25" y1="50" x2="0" y2="-5"  stroke="hsl(340,90%,70%)"
+  stroke-width="33px"
+  stroke-linecap="round"/>  
+  
+  <!-- two buttons -->
+  <circle class="button" cx="0" cy="14" r="3" fill="hsl(240,90%,70%)" stroke-width="0.7" stroke="hsl(60,90%,60%)"  />
+  <circle class="button" cx="0" cy="0" r="3" fill="hsl(180,90%,70%)" stroke-width="0.7" stroke="hsl(240,90%,60%)" />
+  
+  <!-- tie -->
+  <rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="hsl(120,90%,70%)"
+  stroke="hsl(0,90%,60%)" />
+  <!-- bow tie button -->
+  <circle class="button" cx="0" cy="-22" r="6" fill="hsl(300,90%,70%)" stroke="hsl(240,90%,60%)"/>
+	
+  <!-- happy face -->
+   <path d="M-11,-45 A2,2 0 1,0 11,-44.5"
+  	stroke-width="2"
+    stroke="hsl(300,90%,70%)"
+    fill="none"
+    /> 
+
+  <!-- sad face 35, 35 and 1-->
+   <!-- <path d="M-11,-35 A2,2 0 1,1 11,-35"
+  	stroke-width="2"
+    stroke="hsl(300,90%,70%)"
+    fill="none"
+    />  -->
+
+</svg>
+
+<!-- Properties -->
+    <!-- Fill light, border dark -->
+    <!-- 
+    Eyes , Eyes stroke
+    Head
+    smile
+    hands 
+    legs
+    bowtie buttom, bowtie button stroke
+    bowtie color, bowtie stoke
+-->
+
+<!-- Hue main colors -->
+<!-- [0, 60, 120, 180, 240, 300, 340] -->
+<!--[S,L] -> [90, 70]  -->
+<!-- for dark shade [S,L] -> [90,60 ] -->
+<!-- Max vlaues -> [360, 100%, 100%] -->
+
+<!-- Tie fill bowtie button fill different -->
+<!-- head ,  (eyes, smile) diff -->
+<!--legs , button fill diff  -->

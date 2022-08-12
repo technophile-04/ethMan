@@ -1,7 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg"  width="200" height="200" viewBox="-100 -100 200 200">
-  <circle class="body" cx="0" cy="-50" r="32" fill="#f65555"/>
 
-  <circle class="eye" cx="-12" cy="-55" r="3" fill="skyblue" />
+<!-- change based on price feed -->
+<svg xmlns="http://www.w3.org/2000/svg"  width="200" height="200" viewBox="-100 -100 200 200">
+  <circle class="body" cx="0" cy="-50" r="32" fill="hsl(195,53.3%,50%)"/>
+
+  <circle class="eye" cx="-12" cy="-55" r="3" fill="skyblue" stroke="#208bac" stroke-width="0.5"/>
   <circle class="eye" cx="12" cy="-55" r="3" fill="skyblue" />
   
   <!-- hands -->
@@ -28,11 +30,23 @@
   <!-- bow tie button -->
   <circle class="button" cx="0" cy="-22" r="6" fill="#cada39" stroke="black"/>
 	
-  <!-- smile -->
+  <!-- happy face -->
    <path d="M-11,-45 A2,2 0 1,0 11,-44.5"
   	stroke-width="2"
     stroke="#94b547"
     fill="none"
     /> 
 
+  <!-- sad face 35, 35 and 1-->
+   <!-- <path d="M-11,-35 A2,2 0 1,1 11,-35"
+  	stroke-width="2"
+    stroke="#94b547"
+    fill="none"
+    />  -->
+
 </svg>
+
+
+<!-- 
+[]
+f65555 -->
