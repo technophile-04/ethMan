@@ -1,6 +1,5 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.12;
-// todo takes legs up
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -104,47 +103,81 @@ contract ETHMan is ERC721Enumerable {
         return id;
     }
 
-    function tokenURI(uint16 id) public view returns (string memory) {
+    function tokenURI(uint256 id)
+        public
+        view
+        override
+        returns (string memory json)
+    {
         require(_exists(id), "!exist");
 
-        EthManProperties memory properites = getPropertiesById(id);
+        EthManProperties memory properites = getPropertiesById(uint16(id));
 
-        return
-            string.concat(
-                "data:application/json;base64,",
-                Base64.encode(
-                    bytes(
-                        string.concat(
-                            '{"name":"',
-                            string.concat("Oh Pandas #", id.toString()),
-                            '","description":"',
+        if (isHappy[uint16(id)]) {
+            return
+                string.concat(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        bytes(
                             string.concat(
-                                "This Oh Pandas borns with genes of color #",
-                                properites.faceColor,
-                                " and size ",
+                                '{"name":"',
+                                string.concat("ETH Man #", id.toString()),
+                                '","description":"',
+                                string.concat(
+                                    "This ETH Man born with Happy face! with color ",
+                                    properites.faceColor
+                                ),
+                                '","attributes":[{"trait_type":"Eyes Color","value":"',
                                 properites.eyesColor,
-                                "!!!"
-                            ),
-                            '","external_url":"https://ohpandas.com/token/',
-                            id.toString(),
-                            '","attributes":[{"trait_type":"left ear color","value":"#',
-                            properites.eyesColor,
-                            '"},{"trait_type":"right ear color","value":"#',
-                            properites.mouthColor,
-                            '"},{"trait_type":"facial outline color","value":"#',
-                            properites.legsColor,
-                            '"},{"trait_type":"left eye color","value":"#',
-                            properites.handsColor,
-                            '"},{"trait_type":"right eye color","value":"#',
-                            '"}],"owner":"',
-                            '","image": "',
-                            "data:image/svg+xml;base64,",
-                            Base64.encode(bytes(generateSVGofTokenById(id))),
-                            '"}'
+                                '"},{"trait_type":"Hands Color","value":"',
+                                properites.handsColor,
+                                '"},{"trait_type":"Legs Color","value":"',
+                                properites.legsColor,
+                                '"},{"trait_type":"Happy","value":"Yes',
+                                '"}]',
+                                ',"image": "',
+                                "data:image/svg+xml;base64,",
+                                Base64.encode(
+                                    bytes(generateSVGofTokenById(uint16(id)))
+                                ),
+                                '"}'
+                            )
                         )
                     )
-                )
-            );
+                );
+        } else {
+            return
+                string.concat(
+                    "data:application/json;base64,",
+                    Base64.encode(
+                        bytes(
+                            string.concat(
+                                '{"name":"',
+                                string.concat("ETH Man #", id.toString()),
+                                '","description":"',
+                                string.concat(
+                                    "This ETH Man born with Sad face ! with color ",
+                                    properites.faceColor
+                                ),
+                                '","attributes":[{"trait_type":"Eyes Color","value":"',
+                                properites.eyesColor,
+                                '"},{"trait_type":"Hands Color","value":"',
+                                properites.handsColor,
+                                '"},{"trait_type":"Legs Color","value":"',
+                                properites.legsColor,
+                                '"},{"trait_type":"Happy","value":"No',
+                                '"}]',
+                                ',"image": "',
+                                "data:image/svg+xml;base64,",
+                                Base64.encode(
+                                    bytes(generateSVGofTokenById(uint16(id)))
+                                ),
+                                '"}'
+                            )
+                        )
+                    )
+                );
+        }
     }
 
     function generateSVGofTokenById(uint16 id)
@@ -179,14 +212,14 @@ contract ETHMan is ERC721Enumerable {
                 properites.eyesColor,
                 '"/>',
                 // Hand
-                '<line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="',
+                '<line x1="-40" y1="-10" x2="40" y2="-10" stroke="',
                 properites.handsColor,
                 '"stroke-width="28px" stroke-linecap="round" />',
                 // legs
-                '<line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="',
+                '<line x1="-25" y1="50" x2="0" y2="-5" stroke="',
                 properites.legsColor,
                 '"stroke-width="33px" stroke-linecap="round" />',
-                '<line class="limb" x1="25" y1="50" x2="0" y2="-5"  stroke="',
+                '<line x1="25" y1="50" x2="0" y2="-5"  stroke="',
                 properites.legsColor,
                 '"stroke-width="33px" stroke-linecap="round" />',
                 "<path d='M-11,-45 A2,2 0 1,0 11,-44.5' stroke-width='2' stroke='",
@@ -205,17 +238,17 @@ contract ETHMan is ERC721Enumerable {
                 '<circle cx="12" cy="-55" r="3" fill="',
                 properites.eyesColor,
                 '"/>',
+                // legs
+                '<line x1="-25" y1="50" x2="0" y2="-5" stroke="',
+                properites.legsColor,
+                '"stroke-width="33px" stroke-linecap="round" />',
+                '<line x1="25" y1="50" x2="0" y2="-5"  stroke="',
+                properites.legsColor,
+                '"stroke-width="33px" stroke-linecap="round" />',
                 // Hand
-                '<line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="',
+                '<line x1="-40" y1="-10" x2="40" y2="-10" stroke="',
                 properites.handsColor,
                 '"stroke-width="28px" stroke-linecap="round" />',
-                // legs
-                '<line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="',
-                properites.legsColor,
-                '"stroke-width="33px" stroke-linecap="round" />',
-                '<line class="limb" x1="25" y1="50" x2="0" y2="-5"  stroke="',
-                properites.legsColor,
-                '"stroke-width="33px" stroke-linecap="round" />',
                 "<path d='M-11,-35 A2,2 0 1,1 11,-35' stroke-width='2' stroke='",
                 properites.mouthColor,
                 "' fill='none' />"
@@ -237,7 +270,6 @@ contract ETHMan is ERC721Enumerable {
         properites.faceColor = string.concat(
             "hsl(",
             tokenIdToHue[id][randomFaceIndex].toString(),
-            "%",
             ",90%",
             ",70%)"
         );
@@ -251,18 +283,16 @@ contract ETHMan is ERC721Enumerable {
                 properites.eyesColor = string.concat(
                     "hsl(",
                     tokenIdToHue[id][i].toString(),
-                    "%",
                     ",90%",
-                    ",70%)"
+                    ",60%)"
                 );
                 eyesIndex = i;
             } else if (eyesIndex != smileIndex && smileIndex == 9) {
                 properites.mouthColor = string.concat(
                     "hsl(",
                     tokenIdToHue[id][i].toString(),
-                    "%",
                     ",90%",
-                    ",70%)"
+                    ",60%)"
                 );
                 smileIndex = i;
             }
@@ -271,7 +301,6 @@ contract ETHMan is ERC721Enumerable {
         properites.legsColor = string.concat(
             "hsl(",
             tokenIdToHue[id][6].toString(),
-            "%",
             ",90%",
             ",70%)"
         );
@@ -282,7 +311,6 @@ contract ETHMan is ERC721Enumerable {
             properites.handsColor = string.concat(
                 "hsl(",
                 tokenIdToHue[id][handColorIndex].toString(),
-                "%",
                 ",90%",
                 ",70%)"
             );
@@ -291,7 +319,6 @@ contract ETHMan is ERC721Enumerable {
             properites.handsColor = string.concat(
                 "hsl(",
                 tokenIdToHue[id][handColorIndex].toString(),
-                "%",
                 ",90%",
                 ",70%)"
             );
