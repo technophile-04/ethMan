@@ -18,8 +18,8 @@
   stroke-linecap="round"/>  
   
   <!-- two buttons -->
-  <circle class="button" cx="0" cy="14" r="3" fill="hsl(240,90%,70%)" stroke-width="0.7" stroke="hsl(60,90%,60%)"  />
-  <circle class="button" cx="0" cy="0" r="3" fill="hsl(180,90%,70%)" stroke-width="0.7" stroke="hsl(240,90%,60%)" />
+  <circle class="button" cx="0" cy="14" r="3" fill="hsl(240,90%,70%)" stroke-width="0.7"   />
+  <circle class="button" cx="0" cy="0" r="3" fill="hsl(180,90%,70%)" stroke-width="0.7" />
   
   <!-- tie -->
   <rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="hsl(120,90%,70%)"
