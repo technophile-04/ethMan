@@ -22,10 +22,10 @@
   <circle class="button" cx="0" cy="0" r="3" fill="hsl(180,90%,70%)" stroke-width="0.7" /> -->
   
   <!-- tie -->
-  <rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="hsl(120,90%,70%)"
-  stroke="hsl(0,90%,60%)" />
+  <!-- <rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="hsl(120,90%,70%)"
+  stroke="hsl(0,90%,60%)" /> -->
   <!-- bow tie button -->
-  <circle class="button" cx="0" cy="-22" r="6" fill="hsl(300,90%,70%)" stroke="hsl(240,90%,60%)"/>
+  <!-- <circle class="button" cx="0" cy="-22" r="6" fill="hsl(300,90%,70%)" stroke="hsl(240,90%,60%)"/> -->
 	
   <!-- happy face -->
    <path d="M-11,-45 A2,2 0 1,0 11,-44.5"
