@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.12;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
@@ -40,6 +40,7 @@ contract ETHMan is ERC721Enumerable {
     mapping(uint16 => uint16[7]) public tokenIdToHue;
     mapping(uint16 => uint256) public tokenIdToRandomNumber;
     mapping(uint16 => bool) public isHappy;
+    mapping(uint16 => EthManProperties) public tokenIdToProperties;
 
     /* ========== Functions ========== */
     constructor(address _priceFeed) ERC721("ETH Man", "EMAN") {
@@ -48,7 +49,7 @@ contract ETHMan is ERC721Enumerable {
 
     function mintItem() public payable returns (uint256) {
         require(_tokenIds <= MAX_SUPPLY, "DONE MINTING");
-        require(msg.value >= PRICE, "Price is 0.01 matic");
+        require(msg.value >= PRICE, "Price is 0.001 matic");
 
         _tokenIds = _tokenIds + 1;
 
@@ -103,11 +104,81 @@ contract ETHMan is ERC721Enumerable {
 
         tokenIdToHue[id] = HUES;
         tokenIdToRandomNumber[id] = pseudoRandomNumber;
-
+        tokenIdToProperties[id] = getPropertiesById(id);
         (bool success, ) = buildGuild.call{value: msg.value}("");
         require(success, "Failed sending funds to BuildGuild");
 
         return id;
+    }
+
+    function renderTokenById(uint16 id) public view returns (string memory) {
+        EthManProperties memory properites = tokenIdToProperties[id];
+
+        // string memory mouth;
+
+        // if (isHappy[id]) {
+        //     mouth = string.concat(
+        //         "<path d='M-11,-45 A2,2 0 1,0 11,-44.5' stroke-width='2' stroke='",
+        //         properites.mouthColor,
+        //         "' fill='none' />"
+        //     );
+        // } else {
+        //     mouth = string.concat(
+        //         "<path d='M-11,-35 A2,2 0 1,1 11,-35' stroke-width='2' stroke='",
+        //         properites.mouthColor,
+        //         "' fill='none' />"
+        //     );
+        // }
+
+        string memory render = string(
+            abi.encodePacked(
+                // Face
+                '<circle cx="0" cy="-50" r="32" fill="',
+                properites.faceColor,
+                '"/>',
+                // Eyes
+                '<circle cx="-12" cy="-55" r="3" fill="',
+                properites.eyesColor,
+                '"/>',
+                '<circle cx="12" cy="-55" r="3" fill="',
+                properites.eyesColor,
+                '"/>',
+                // Hand
+                '<line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="',
+                properites.handsColor,
+                '"stroke-width="28px" stroke-linecap="round" />',
+                // legs
+                '<line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="',
+                properites.legsColor,
+                '"stroke-width="33px" stroke-linecap="round" />',
+                '<line class="limb" x1="25" y1="50" x2="0" y2="-5"  stroke="',
+                properites.legsColor,
+                '"stroke-width="33px" stroke-linecap="round" />',
+                //Buttons
+                '<circle class="button" cx="0" cy="14" r="3" fill="',
+                properites.btn1Color,
+                '" />',
+                '<circle class="button" cx="0" cy="0" r="3" fill="',
+                properites.btn2Color,
+                '" />',
+                // tie
+                '<rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="',
+                properites.tieColor,
+                '" stroke="',
+                properites.tieStroke,
+                '" />',
+                // tie button
+                '<circle class="button" cx="0" cy="-22" r="6" fill="',
+                properites.tieBtnColor,
+                '" stroke="',
+                properites.tieBtnStrokeColor,
+                '" />'
+                // mouth
+                // mouth
+            )
+        );
+
+        return render;
     }
 
     function getPropertiesById(uint16 id)
@@ -246,5 +317,76 @@ contract ETHMan is ERC721Enumerable {
             ",90%",
             ",60%)"
         );
+
+        return properites;
     }
 }
+
+// function renderTokenById(uint16 id) public view returns (string memory) {
+//         EthManProperties memory properites = tokenIdToProperties[id];
+
+//         string memory mouth;
+
+//         if (isHappy[id]) {
+//             mouth = string.concat(
+//                 "<path d='M-11,-45 A2,2 0 1,0 11,-44.5' stroke-width='2' stroke='",
+//                 properites.mouthColor,
+//                 "' fill='none' />"
+//             );
+//         } else {
+//             mouth = string.concat(
+//                 "<path d='M-11,-35 A2,2 0 1,1 11,-35' stroke-width='2' stroke='",
+//                 properites.mouthColor,
+//                 "' fill='none' />"
+//             );
+//         }
+//         string memory render = string(
+//             abi.encodePacked(
+//                 // Face
+//                 '<circle cx="0" cy="-50" r="32" fill="',
+//                 properites.faceColor,
+//                 '"/>',
+//                 // Eyes
+//                 '<circle cx="-12" cy="-55" r="3" fill="',
+//                 properites.eyesColor,
+//                 '"/>',
+//                 '<circle cx="12" cy="-55" r="3" fill="',
+//                 properites.eyesColor,
+//                 '"/>',
+//                 // Hand
+//                 '<line class="limb" x1="-40" y1="-10" x2="40" y2="-10" stroke="',
+//                 properites.handsColor,
+//                 '"stroke-width="28px" stroke-linecap="round" />',
+//                 // legs
+//                 '<line class="limb" x1="-25" y1="50" x2="0" y2="-5" stroke="',
+//                 properites.legsColor,
+//                 '"stroke-width="33px" stroke-linecap="round" />',
+//                 '<line class="limb" x1="25" y1="50" x2="0" y2="-5"  stroke="',
+//                 properites.legsColor,
+//                 '"stroke-width="33px" stroke-linecap="round" />',
+//                 //Buttons
+//                 '<circle class="button" cx="0" cy="14" r="3" fill="',
+//                 properites.btn1Color,
+//                 '" />',
+//                 '<circle class="button" cx="0" cy="0" r="3" fill="',
+//                 properites.btn2Color,
+//                 '" />',
+//                 // tie
+//                 '<rect class="tie" x="-16" y="-27" width="32" height="9" rx="5" fill="',
+//                 properites.tieColor,
+//                 '" stroke="',
+//                 properites.tieStroke,
+//                 '" />',
+//                 // tie button
+//                 '<circle class="button" cx="0" cy="-22" r="6" fill="',
+//                 properites.tieBtnColor,
+//                 '" stroke="',
+//                 properites.tieBtnStrokeColor,
+//                 '" />',
+//                 // mouth
+//                 mouth
+//             )
+//         );
+
+//         return render;
+//     }
