@@ -20,6 +20,8 @@ function Home({
   mainnetProvider,
   address,
 }) {
+  console.log("readContracts", readContracts);
+  console.log("Address in home", address);
   const balanceContract = useContractReader(readContracts, "ETHMan", "balanceOf", [address]);
   const priceContract = useContractReader(readContracts, "ETHMan", "PRICE");
 
@@ -30,6 +32,7 @@ function Home({
 
   useEffect(() => {
     if (balanceContract) {
+      console.log("Balance", balanceContract);
       setBalance(balanceContract);
     }
   }, [balanceContract]);

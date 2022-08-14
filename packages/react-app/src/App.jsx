@@ -1,13 +1,9 @@
 import { Button, Col, Menu, Row } from "antd";
+import { JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+import { Signer } from "ethers";
+
 import "antd/dist/antd.css";
-import {
-  useBalance,
-  useContractLoader,
-  useContractReader,
-  useGasPrice,
-  useOnBlock,
-  useUserProviderAndSigner,
-} from "eth-hooks";
+import { useBalance, useContractLoader, useContractReader, useGasPrice, useOnBlock } from "eth-hooks";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
@@ -30,7 +26,7 @@ import externalContracts from "./contracts/external_contracts";
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
-import { useStaticJsonRPC } from "./hooks";
+import { useStaticJsonRPC, useUserProviderAndSigner } from "./hooks";
 
 const { ethers } = require("ethers");
 /*
@@ -58,7 +54,7 @@ const initialNetwork = NETWORKS.rinkeby; // <------- select your target frontend
 // 😬 Sorry for all the console logging
 const DEBUG = true;
 const NETWORKCHECK = true;
-const USE_BURNER_WALLET = true; // toggle burner wallet feature
+const USE_BURNER_WALLET = false; // toggle burner wallet feature
 const USE_NETWORK_SELECTOR = false;
 
 const web3Modal = Web3ModalSetup();
@@ -113,7 +109,7 @@ function App(props) {
   const gasPrice = useGasPrice(targetNetwork, "fast");
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
   console.log("INjected provider is ::::", injectedProvider);
-  const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
+  const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider);
   const userSigner = userProviderAndSigner.signer;
   console.log("UserSigner changed0----------", userProviderAndSigner);
 
@@ -140,6 +136,7 @@ function App(props) {
   const tx = Transactor(userSigner, gasPrice);
 
   // 🏗 scaffold-eth is full of handy hooks like this one to get your balance:
+  console.log("Local Provider", localProvider);
   const yourLocalBalance = useBalance(localProvider, address);
 
   // Just plug in different 🛰 providers to get your balance on different chains:
@@ -148,12 +145,16 @@ function App(props) {
   // const contractConfig = useContractConfig();
 
   const contractConfig = { deployedContracts: deployedContracts || {}, externalContracts: externalContracts || {} };
+  console.log("contractConfig", contractConfig);
 
   // Load in your local 📝 contract and read a value from it:
-  const readContracts = useContractLoader(localProvider, contractConfig);
+  const readContracts = useContractLoader(userSigner, contractConfig, localChainId);
+
+  console.log("Read in App", readContracts);
 
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
+  console.log("writeContracts", writeContracts);
 
   // EXTERNAL CONTRACT EXAMPLE:
   //
@@ -220,7 +221,31 @@ function App(props) {
 
   const loadWeb3Modal = useCallback(async () => {
     const provider = await web3Modal.connect();
+    const providerOrSigner = new ethers.providers.Web3Provider(provider);
     setInjectedProvider(new ethers.providers.Web3Provider(provider));
+    console.log("🔥 inside parseProvider");
+
+    let signer = undefined;
+    let providers;
+    let providerNetwork;
+    if (providerOrSigner && (providerOrSigner instanceof JsonRpcProvider || providerOrSigner instanceof Web3Provider)) {
+      console.log("🔥 inside parseProvider");
+      const accounts = await providerOrSigner.listAccounts();
+      console.log("accounts", accounts);
+
+      if (accounts && accounts.length > 0) {
+        signer = providerOrSigner.getSigner();
+        console.log("gotSigner!", signer);
+      }
+      providers = providerOrSigner;
+      providerNetwork = await providerOrSigner.getNetwork();
+    }
+    if (!signer && providerOrSigner instanceof Signer) {
+      console.log("!signer");
+      signer = providerOrSigner;
+      providers = signer.provider;
+      providerNetwork = providers && (await providers.getNetwork());
+    }
 
     provider.on("chainChanged", chainId => {
       console.log(`chain changed to ${chainId}! updating providers`);
