@@ -60,6 +60,8 @@ export default function Contract({
   const contracts = useContractLoader(provider, contractConfig, chainId);
   let contract;
   if (!customContract) {
+    console.log("Inside IF");
+    console.log("Inside IF", contracts);
     contract = contracts ? contracts[name] : "";
   } else {
     contract = customContract;
@@ -67,6 +69,8 @@ export default function Contract({
 
   const address = contract ? contract.address : "";
   const contractIsDeployed = useContractExistsAtAddress(provider, address);
+
+  console.log("Contracts : ", contractConfig);
 
   const displayedContractFunctions = useMemo(() => {
     const results = contract

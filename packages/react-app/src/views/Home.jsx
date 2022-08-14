@@ -1,7 +1,9 @@
+import { Button, Card, List } from "antd";
 import { useContractReader } from "eth-hooks";
 import { ethers } from "ethers";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Address, AddressInput } from "../components";
 
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
@@ -9,113 +11,158 @@ import { Link } from "react-router-dom";
  * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
  * @returns react component
  **/
-function Home({ yourLocalBalance, readContracts }) {
-  // you can also use hooks locally in your component of choice
-  // in this case, let's keep track of 'purpose' variable from our contract
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
+function Home({
+  userSigner,
+  readContracts,
+  writeContracts,
+  tx,
+  loadWeb3Modal,
+  blockExplorer,
+  mainnetProvider,
+  address,
+}) {
+  console.log("readContracts", readContracts);
+
+  const balanceContract = useContractReader(readContracts, "ETHMan", "balanceOf", [address]);
+  const priceContract = useContractReader(readContracts, "ETHMan", "PRICE");
+  console.log("Balance Contract", balanceContract);
+  console.log("Address", address);
+  console.log("PRICE", priceContract);
+
+  const [balance, setBalance] = useState();
+  const [price, setPrice] = useState();
+
+  const [transferToAddresses, setTransferToAddresses] = useState({});
+
+  useEffect(() => {
+    if (balanceContract) {
+      console.log("Balance Contract", balanceContract);
+      setBalance(balanceContract);
+    }
+  }, [balanceContract]);
+
+  useEffect(() => {
+    if (priceContract) {
+      console.log("Price is :", priceContract);
+      setPrice(priceContract);
+    }
+  }, [priceContract]);
+
+  const [ethMan, setEthMan] = useState();
+
+  console.log("Home: " + address + ", Balance: " + balance);
+
+  useEffect(() => {
+    const updateYourCollectibles = async () => {
+      const collectibleUpdate = [];
+      for (let tokenIndex = 0; tokenIndex < balance; ++tokenIndex) {
+        try {
+          console.log("Getting token index " + tokenIndex);
+          const tokenId = await readContracts.ETHMan.tokenOfOwnerByIndex(address, tokenIndex);
+          console.log("tokenId: " + tokenId);
+          const tokenURI = await readContracts.ETHMan.tokenURI(tokenId);
+          const jsonManifestString = Buffer.from(tokenURI.substring(29), "base64").toString();
+          console.log("jsonManifestString: " + jsonManifestString);
+
+          try {
+            const jsonManifest = JSON.parse(jsonManifestString);
+            console.log("jsonManifest: " + jsonManifest);
+            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
+          } catch (err) {
+            console.log(err);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      setEthMan(collectibleUpdate.reverse());
+    };
+    if (address && balance) updateYourCollectibles();
+  }, [address, balance]);
 
   return (
     <div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>📝</span>
-        This Is Your App Home. You can start editing it in{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          packages/react-app/src/views/Home.jsx
-        </span>
+      <div style={{ maxWidth: 820, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+        {userSigner ? (
+          <Button
+            type={"primary"}
+            onClick={() => {
+              tx(writeContracts.ETHMan.mintItem({ value: price }));
+            }}
+          >
+            MINT
+          </Button>
+        ) : (
+          <Button type={"primary"} onClick={loadWeb3Modal}>
+            CONNECT WALLET
+          </Button>
+        )}
       </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>✏️</span>
-        Edit your smart contract{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          YourContract.sol
-        </span>{" "}
-        in{" "}
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          packages/hardhat/contracts
-        </span>
-      </div>
-      {!purpose ? (
-        <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>👷‍♀️</span>
-          You haven't deployed your contract yet, run
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            yarn chain
-          </span>{" "}
-          and{" "}
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            yarn deploy
-          </span>{" "}
-          to deploy your first contract!
-        </div>
-      ) : (
-        <div style={{ margin: 32 }}>
-          <span style={{ marginRight: 8 }}>🤓</span>
-          The "purpose" variable from your contract is{" "}
-          <span
-            className="highlight"
-            style={{
-              marginLeft: 4,
-              /* backgroundColor: "#f9f9f9", */ padding: 4,
-              borderRadius: 4,
-              fontWeight: "bolder",
-            }}
-          >
-            {purpose}
-          </span>
-        </div>
-      )}
 
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>🤖</span>
-        An example prop of your balance{" "}
-        <span style={{ fontWeight: "bold", color: "green" }}>({ethers.utils.formatEther(yourLocalBalance)})</span> was
-        passed into the
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          Home.jsx
-        </span>{" "}
-        component from
-        <span
-          className="highlight"
-          style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
-        >
-          App.jsx
-        </span>
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>💭</span>
-        Check out the <Link to="/hints">"Hints"</Link> tab for more tips.
-      </div>
-      <div style={{ margin: 32 }}>
-        <span style={{ marginRight: 8 }}>🛠</span>
-        Tinker with your smart contract using the <Link to="/debug">"Debug Contract"</Link> tab.
+      <div style={{ width: 820, margin: "auto", paddingBottom: 256 }}>
+        <List
+          bordered
+          dataSource={ethMan}
+          renderItem={item => {
+            const id = item.id.toNumber();
+
+            console.log("IMAGE", item.image);
+
+            return (
+              <List.Item key={id + "_" + item.uri + "_" + item.owner}>
+                <Card
+                  title={
+                    <div>
+                      <span style={{ fontSize: 18, marginRight: 8 }}>{item.name}</span>
+                    </div>
+                  }
+                >
+                  <a
+                    href={
+                      "https://opensea.io/assets/" +
+                      (readContracts && readContracts.ETHMan && readContracts.ETHMan.address) +
+                      "/" +
+                      item.id
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src={item.image} />
+                  </a>
+                  <div>{item.description}</div>
+                </Card>
+
+                <div>
+                  owner:{" "}
+                  <Address
+                    address={item.owner}
+                    ensProvider={mainnetProvider}
+                    blockExplorer={blockExplorer}
+                    fontSize={16}
+                  />
+                  <AddressInput
+                    ensProvider={mainnetProvider}
+                    placeholder="transfer to address"
+                    value={transferToAddresses[id]}
+                    onChange={newValue => {
+                      const update = {};
+                      update[id] = newValue;
+                      setTransferToAddresses({ ...transferToAddresses, ...update });
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      console.log("writeContracts", writeContracts);
+                      tx(writeContracts.ETHMan.transferFrom(address, transferToAddresses[id], id));
+                    }}
+                  >
+                    Transfer
+                  </Button>
+                </div>
+              </List.Item>
+            );
+          }}
+        />
       </div>
     </div>
   );
