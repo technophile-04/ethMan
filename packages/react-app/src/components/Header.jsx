@@ -5,7 +5,7 @@ const { Title, Text } = Typography;
 
 // displays a page header
 
-export default function Header({ link, title, subTitle, ...props }) {
+export default function Header({ link, title, subTitle1, subTitle2, ...props }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", padding: "1.2rem" }}>
       <div style={{ display: "flex", flexDirection: "column", flex: 1, alignItems: "start" }}>
@@ -15,7 +15,10 @@ export default function Header({ link, title, subTitle, ...props }) {
           </Title>
         </a>
         <Text type="secondary" style={{ textAlign: "left" }}>
-          {subTitle}
+          {subTitle1}
+        </Text>
+        <Text type="secondary" style={{ textAlign: "left" }}>
+          {subTitle2}
         </Text>
       </div>
       {props.children}
@@ -24,7 +27,8 @@ export default function Header({ link, title, subTitle, ...props }) {
 }
 
 Header.defaultProps = {
-  link: "https://github.com/austintgriffith/scaffold-eth",
-  title: "🏗 scaffold-eth",
-  subTitle: "forkable Ethereum dev stack focused on fast product iteration",
+  link: "https://github.com/technophile-04/ethMan",
+  title: "🧍‍♂️ ETH Man",
+  subTitle1: "ETH Man reacts to live ETH price from oracles !.",
+  subTitle2: "He is happy 🙂 when its up 📈 and sad 🙁 when its down 📉 then previous value.",
 };

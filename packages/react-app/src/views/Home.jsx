@@ -1,8 +1,7 @@
-import { Button, Card, List } from "antd";
+/* eslint-disable react/jsx-pascal-case */
+import { Button, Card, List, Skeleton, Space } from "antd";
 import { useContractReader } from "eth-hooks";
-import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Address, AddressInput } from "../components";
 
 /**
@@ -21,13 +20,8 @@ function Home({
   mainnetProvider,
   address,
 }) {
-  console.log("readContracts", readContracts);
-
   const balanceContract = useContractReader(readContracts, "ETHMan", "balanceOf", [address]);
   const priceContract = useContractReader(readContracts, "ETHMan", "PRICE");
-  console.log("Balance Contract", balanceContract);
-  console.log("Address", address);
-  console.log("PRICE", priceContract);
 
   const [balance, setBalance] = useState();
   const [price, setPrice] = useState();
@@ -36,25 +30,25 @@ function Home({
 
   useEffect(() => {
     if (balanceContract) {
-      console.log("Balance Contract", balanceContract);
       setBalance(balanceContract);
     }
   }, [balanceContract]);
 
   useEffect(() => {
     if (priceContract) {
-      console.log("Price is :", priceContract);
       setPrice(priceContract);
     }
   }, [priceContract]);
 
   const [ethMan, setEthMan] = useState();
+  const [loading, setLoading] = useState(false);
 
   console.log("Home: " + address + ", Balance: " + balance);
 
   useEffect(() => {
     const updateYourCollectibles = async () => {
       const collectibleUpdate = [];
+      setLoading(true);
       for (let tokenIndex = 0; tokenIndex < balance; ++tokenIndex) {
         try {
           console.log("Getting token index " + tokenIndex);
@@ -72,13 +66,15 @@ function Home({
             console.log(err);
           }
         } catch (err) {
+          setLoading(false);
           console.log(err);
         }
       }
       setEthMan(collectibleUpdate.reverse());
+      setLoading(false);
     };
     if (address && balance) updateYourCollectibles();
-  }, [address, balance]);
+  }, [address, balance, readContracts]);
 
   return (
     <div>
@@ -110,55 +106,60 @@ function Home({
 
             return (
               <List.Item key={id + "_" + item.uri + "_" + item.owner}>
-                <Card
-                  title={
-                    <div>
-                      <span style={{ fontSize: 18, marginRight: 8 }}>{item.name}</span>
-                    </div>
-                  }
-                >
-                  <a
-                    href={
-                      "https://opensea.io/assets/" +
-                      (readContracts && readContracts.ETHMan && readContracts.ETHMan.address) +
-                      "/" +
-                      item.id
+                <Skeleton loading={loading} active>
+                  <Card
+                    title={
+                      <div>
+                        <span style={{ fontSize: 18, marginRight: 8 }}>{item.name}</span>
+                      </div>
                     }
-                    target="_blank"
-                    rel="noreferrer"
                   >
-                    <img src={item.image} />
-                  </a>
-                  <div>{item.description}</div>
-                </Card>
+                    <a
+                      href={
+                        "https://opensea.io/assets/" +
+                        (readContracts && readContracts.ETHMan && readContracts.ETHMan.address) +
+                        "/" +
+                        item.id
+                      }
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <img src={item.image} alt="ETH Man" />
+                    </a>
+                    <div>{item.description}</div>
+                  </Card>
 
-                <div>
-                  owner:{" "}
-                  <Address
-                    address={item.owner}
-                    ensProvider={mainnetProvider}
-                    blockExplorer={blockExplorer}
-                    fontSize={16}
-                  />
-                  <AddressInput
-                    ensProvider={mainnetProvider}
-                    placeholder="transfer to address"
-                    value={transferToAddresses[id]}
-                    onChange={newValue => {
-                      const update = {};
-                      update[id] = newValue;
-                      setTransferToAddresses({ ...transferToAddresses, ...update });
-                    }}
-                  />
-                  <Button
-                    onClick={() => {
-                      console.log("writeContracts", writeContracts);
-                      tx(writeContracts.ETHMan.transferFrom(address, transferToAddresses[id], id));
-                    }}
-                  >
-                    Transfer
-                  </Button>
-                </div>
+                  <Space direction="vertical" size={"middle"} style={{ marginLeft: "1rem" }}>
+                    <div>
+                      Owner:{" "}
+                      <Address
+                        address={item.owner}
+                        ensProvider={mainnetProvider}
+                        blockExplorer={blockExplorer}
+                        fontSize={16}
+                      />
+                    </div>
+
+                    <AddressInput
+                      ensProvider={mainnetProvider}
+                      placeholder="transfer to address"
+                      value={transferToAddresses[id]}
+                      onChange={newValue => {
+                        const update = {};
+                        update[id] = newValue;
+                        setTransferToAddresses({ ...transferToAddresses, ...update });
+                      }}
+                    />
+                    <Button
+                      onClick={() => {
+                        console.log("writeContracts", writeContracts);
+                        tx(writeContracts.ETHMan.transferFrom(address, transferToAddresses[id], id));
+                      }}
+                    >
+                      Transfer
+                    </Button>
+                  </Space>
+                </Skeleton>
               </List.Item>
             );
           }}

@@ -53,7 +53,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const initialNetwork = NETWORKS.rinkeby; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -112,14 +112,18 @@ function App(props) {
   /* 🔥 This hook will get the price of Gas from ⛽️ EtherGasStation */
   const gasPrice = useGasPrice(targetNetwork, "fast");
   // Use your injected provider from 🦊 Metamask or if you don't have it then instantly generate a 🔥 burner wallet.
+  console.log("INjected provider is ::::", injectedProvider);
   const userProviderAndSigner = useUserProviderAndSigner(injectedProvider, localProvider, USE_BURNER_WALLET);
   const userSigner = userProviderAndSigner.signer;
+  console.log("UserSigner changed0----------", userProviderAndSigner);
 
   useEffect(() => {
     async function getAddress() {
       if (userSigner) {
+        console.log("UserSigner changed");
         const newAddress = await userSigner.getAddress();
         setAddress(newAddress);
+        console.log("UserSigner changed", newAddress);
       }
     }
     getAddress();
@@ -146,7 +150,7 @@ function App(props) {
   const contractConfig = { deployedContracts: deployedContracts || {}, externalContracts: externalContracts || {} };
 
   // Load in your local 📝 contract and read a value from it:
-  const readContracts = useContractLoader(localProvider, contractConfig, localChainId);
+  const readContracts = useContractLoader(localProvider, contractConfig);
 
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
@@ -357,10 +361,10 @@ function App(props) {
           </Col>
         </Row>
 
-        <Row align="middle" gutter={[4, 4]}>
+        {/* <Row align="middle" gutter={[4, 4]}>
           <Col span={24}>
             {
-              //  if the local provider has a signer, let's show the faucet:
+               if the local provider has a signer, let's show the faucet:
               faucetAvailable ? (
                 <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
               ) : (
@@ -368,7 +372,7 @@ function App(props) {
               )
             }
           </Col>
-        </Row>
+        </Row> */}
       </div>
     </div>
   );
