@@ -5,7 +5,7 @@ const {
   INITAL_ANSWERE,
 } = require("../helper-hardhat-config");
 
-const deployMocks = async (hre) => {
+module.exports = async (hre) => {
   const { getNamedAccounts, deployments } = hre;
   const { deploy, log } = deployments;
   const { deployer } = await getNamedAccounts();
@@ -24,5 +24,4 @@ const deployMocks = async (hre) => {
   }
 };
 
-export default deployMocks;
-deployMocks.tags = ["all", "mocks"];
+module.exports.tags = ["all", "mocks"];

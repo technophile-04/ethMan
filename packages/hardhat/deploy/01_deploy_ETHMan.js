@@ -11,13 +11,18 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  let ethUsdPriceFeedAddress;
+  log("ChainID", chainId);
 
-  if (chainId === 31337) {
+  let ethUsdPriceFeedAddress;
+  let blockConfirmations;
+
+  if (chainId === "31337") {
     const ethUsdAggregator = await get("MockV3Aggregator");
     ethUsdPriceFeedAddress = ethUsdAggregator.address;
+    blockConfirmations = 1;
   } else {
     ethUsdPriceFeedAddress = networkConfig[network.name].ethUsdPriceFeed;
+    blockConfirmations = networkConfig[network.name].blockConfirmations;
   }
 
   log("----------------------------------------------------");
@@ -27,7 +32,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     from: deployer,
     args: [ethUsdPriceFeedAddress],
     log: true,
-    waitConfirmations: networkConfig[network.name].blockConfirmations || 1,
+    waitConfirmations: blockConfirmations || 1,
   });
 
   log(`EThMan deployed at ${ethMan.address}`);
