@@ -42,7 +42,7 @@ contract ETHMan is ERC721Enumerable {
 
     function mintItem() public payable returns (uint256) {
         require(_tokenIds <= MAX_SUPPLY, "DONE MINTING");
-        require(msg.value >= PRICE, "Price is 0.001 matic");
+        require(msg.value >= PRICE, "Price is 0.001 ETH");
 
         _tokenIds = _tokenIds + 1;
 

@@ -27,7 +27,7 @@ const { isAddress, getAddress, formatUnits, parseUnits } = utils;
 //
 // Select the network you want to deploy to here:
 //
-const defaultNetwork = "rinkeby";
+const defaultNetwork = "arbitrum";
 
 const mainnetGwei = 21;
 
@@ -126,12 +126,10 @@ module.exports = {
       },
     },
     polygon: {
-      url: "https://polygon-rpc.com",
+      url: `${process.env.POLYGON_RPC_URL}`,
       // url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXx/polygon/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
       gasPrice: 3200000000,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      accounts: [`${process.env.RINKEBY_DEPLOYER_PRIV_KEY}`],
     },
     mumbai: {
       url: "https://rpc-mumbai.maticvigil.com",
@@ -261,11 +259,9 @@ module.exports = {
       },
     },
     arbitrum: {
-      url: "https://arb1.arbitrum.io/rpc",
+      url: `${process.env.ARBITRUM_RPC_URL}`,
       chainId: 42161,
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      accounts: [`${process.env.ARBITRUM_DEPLOYER_PRIV_KEY}`],
     },
     rinkebyArbitrum: {
       url: "https://rinkeby.arbitrum.io/rpc",
@@ -317,6 +313,7 @@ module.exports = {
       mainnet: "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW",
       // add other network's API key here
       rinkeby: `${process.env.RINKEYBY_ETHERSCAN_API_KEY}`,
+      arbitrumOne: `XABYX62KACY7JN27I42E5UN23DVUUR16BG`,
     },
   },
   abiExporter: {
