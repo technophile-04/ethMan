@@ -259,7 +259,7 @@ module.exports = {
       },
     },
     arbitrum: {
-      url: `${process.env.ARBITRUM_RPC_URL}`,
+      url: `https://arb1.arbitrum.io/rpc`,
       chainId: 42161,
       accounts: [`${process.env.ARBITRUM_DEPLOYER_PRIV_KEY}`],
     },
