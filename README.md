@@ -4,7 +4,9 @@
 
 ---
 
-**ETH Man** reacts to **live** **ETH** price using Chainlink **oracles**! He is **happy** 🙂 when it's up 📈 and **sad** 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). **100+ already minted 🫣 🫣!**
+**ETH Man** reacts to **live** **ETH** price using Chainlink **oracles**! He is **happy** 🙂 when it's up 📈 and **sad** 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). 
+
+### **100+ already minted 🫣 🫣!**
 
 Mint it on: https://ethman-sb.surge.sh/
 
