@@ -7,7 +7,7 @@ async function main(numberOfNFTs) {
   const res = [];
   //   eslint-disable-next-line no-plusplus
   for (let i = 0; i < numberOfNFTs; i++) {
-    console.log(`Minting NFT with tokenId ${i + 1}`);
+    console.log(`Getting token URI for tokenID ${i + 1}`);
     const tokenId = (i + 1).toString();
     // eslint-disable-next-line no-await-in-loop
     const jsonBase64Encoded = await ethMan.tokenURI(tokenId);

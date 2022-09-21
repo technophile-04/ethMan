@@ -44,6 +44,8 @@
     "send": "hardhat send",
     "generate": "hardhat generate",
     "account": "hardhat account",
-    "verify": "hardhat verify"
+    "verify": "hardhat verify",
+    "mintNFTs" : "hardhat run scripts/mintNFTs.js --network localhost",
+    "getTokenURIs" : "hardhat run scripts/getTokenURI.js --network localhost"
   }
 }

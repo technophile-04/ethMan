@@ -23,6 +23,8 @@
     "start": "yarn workspace @scaffold-eth/react-app start",
     "compile": "yarn workspace @scaffold-eth/hardhat compile",
     "deploy": "yarn workspace @scaffold-eth/hardhat deploy",
+    "mintNFTs": "yarn workspace @scaffold-eth/hardhat mintNFTs",
+    "getTokenURIs": "yarn workspace @scaffold-eth/hardhat getTokenURIs",
     "verify": "yarn workspace @scaffold-eth/hardhat verify",
     "watch": "yarn workspace @scaffold-eth/hardhat watch",
     "accounts": "yarn workspace @scaffold-eth/hardhat accounts",
