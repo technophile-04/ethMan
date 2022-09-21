@@ -4,7 +4,9 @@
 
 ---
 
-**ETH Man** reacts to **live** **ETH** price using Chainlink **oracles**! He is **happy** 🙂 when it's up 📈 and **sad** 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). **100+ already minted 🫣 🫣!**
+**ETH Man** reacts to **live** **ETH** price using Chainlink **oracles**! He is **happy** 🙂 when it's up 📈 and **sad** 🙁 when it's down 📉 than the previous value. (Dynamic face, colors on chain SVG NFT). 
+
+### **100+ already minted 🫣 🫣!**
 
 **Made with [scaffold-eth](https://github.com/scaffold-eth/scaffold-eth]) ❤️**
 
@@ -16,6 +18,9 @@ View the collection on Arbitrum Marketplace: https://stratosnft.io/collection/0x
 
 Verified Contract : https://arbiscan.io/address/0x28E1679b0b5CAbd4F494278171cEDcB7134D5DF2#code
 (Also available and verified on https://sourcify.dev/ )
+
+![Screenshot 2022-08-16 at 6 13 52 PM](https://user-images.githubusercontent.com/80153681/185744895-de73a431-1cb4-423f-94f9-5e4fbd2d2aa3.jpg)
+
 
 ## For Developers 👋
 ---
