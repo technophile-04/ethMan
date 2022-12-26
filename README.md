@@ -14,7 +14,7 @@ Mint it on: https://ethman-sb.surge.sh/
 
 The price is only 0.001 AETH and everything goes to https://buidlguidl.com/ (web3 Builders community)
 
-View the collection on Arbitrum Marketplace: https://stratosnft.io/collection/0x28E1679b0b5CAbd4F494278171cEDcB7134D5DF2
+View the collection on Opensea: https://opensea.io/collection/eth-man-v2
 
 Verified Contract : https://arbiscan.io/address/0x28E1679b0b5CAbd4F494278171cEDcB7134D5DF2#code
 (Also available and verified on https://sourcify.dev/ )
